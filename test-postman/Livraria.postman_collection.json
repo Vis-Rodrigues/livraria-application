@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "74c5cc1c-a719-4b7b-b5f6-565a1d5b53ef",
+		"name": "Livraria",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Consultar todos os livros",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/livros",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"livros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consultar livro por isbn",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/livros/987134354354654",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"livros",
+						"987134354354654"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastrar livro",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"titulo\": \"Postman for all\",\n        \"descricao\": \"Passo a passo de como utilizar o postman\",\n        \"preco\": 40.4,\n        \"isbn\": \"465798456132\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8088/livros",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"livros"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar livro",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"titulo\": \"Postman 4all\",\n        \"descricao\": \"Passo a passo de como utilizar o Postman\",\n        \"preco\": 50.4,\n        \"isbn\": \"465798456132\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8088/livros/465798456132",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"livros",
+						"465798456132"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar preco do livro",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"preco\": 60.4\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8088/livros/465798456132",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"livros",
+						"465798456132"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar livro por isbn",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/livros/465798456132",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"livros",
+						"465798456132"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
