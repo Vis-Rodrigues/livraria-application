@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,68 +27,11 @@ import br.com.fiap.livraria.model.dto.UpdatePrecoLivroDTO;
 @RequestMapping("livros")
 public class LivrariaController {
 	
-	@GetMapping
-	public List<LivroDTO> buscarLivros(@RequestParam(required=false,value="titulo")String titulo){
-		
-		return lstLivros().stream()
-				.filter(dto -> titulo == null || dto.getTitulo()
-				.contains(titulo)).collect(Collectors.toList());
-		
-	}
+	//mock
+	private List<LivroDTO> livros;
 	
-	@GetMapping("{id}")
-	public LivroDTO buscarPorId(@PathVariable int id) {
-		List<LivroDTO> livros = lstLivros();
-		switch (id) {
-		case 1:
-			return livros.get(0);
-		case 2:
-			return livros.get(1);
-		default:
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado");
-		}
-		
-	}
-	
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public LivroDTO criar(@RequestBody CreateUpdateLivroDTO createUpdateLivroDTO) {
-		LivroDTO livro = new LivroDTO();
-		livro.setId(3);
-		livro.setTitulo(createUpdateLivroDTO.getTitulo());
-		livro.setDescricao(createUpdateLivroDTO.getDescricao());
-		livro.setISBN(createUpdateLivroDTO.getISBN());
-		livro.setPreco(createUpdateLivroDTO.getPreco());
-		livro.setDataDePublicacao(new Date());
-		return livro;
-	}
-	
-	@PutMapping("{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public LivroDTO atualizar(@PathVariable int id,
-							  @RequestBody CreateUpdateLivroDTO createUpdateLivroDTO) {
-		LivroDTO livro = new LivroDTO();
-		livro.setId(id);
-		livro.setTitulo(createUpdateLivroDTO.getTitulo());
-		livro.setDescricao(createUpdateLivroDTO.getDescricao());
-		livro.setISBN(createUpdateLivroDTO.getISBN());
-		livro.setPreco(createUpdateLivroDTO.getPreco());
-		livro.setDataDePublicacao(new Date());
-		return livro;
-	}
-	
-	@PatchMapping("{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public LivroDTO atualizarPreco(@PathVariable int id,
-								   @RequestBody UpdatePrecoLivroDTO dto) {
-		LivroDTO livro = buscarPorId(id);
-		livro.setPreco(dto.getPreco());
-		
-		return livro;
-		
-	}
-	
-	private List<LivroDTO> lstLivros(){
+	//mock
+	public LivrariaController() {
 		LivroDTO livro = new LivroDTO();
 		livro.setId(1);
 		livro.setTitulo("Aprenda Spring");
@@ -104,11 +48,74 @@ public class LivrariaController {
 		livro1.setISBN("132465789456321");
 		livro1.setPreco(30.4);
 		
-		List<LivroDTO> livros = new ArrayList<LivroDTO>();
-		
+		livros = new ArrayList<LivroDTO>();
 		livros.add(livro);
 		livros.add(livro1);
-		
-		return livros;
 	}
+	
+	@GetMapping
+	public List<LivroDTO> buscarLivros(@RequestParam(required=false,value="titulo")String titulo){
+		return livros.stream()
+				.filter(dto -> titulo == null || dto.getTitulo()
+				.contains(titulo)).collect(Collectors.toList());
+		
+	}
+	
+	@GetMapping("{isbn}")
+	public LivroDTO buscarPorId(@PathVariable String isbn) {
+		return buscarLivroPorISBN(isbn);
+	}
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public LivroDTO criar(@RequestBody CreateUpdateLivroDTO createUpdateLivroDTO) {
+		LivroDTO livro = new LivroDTO();
+		livro.setId(livros.size()+1);
+		livro.setTitulo(createUpdateLivroDTO.getTitulo());
+		livro.setDescricao(createUpdateLivroDTO.getDescricao());
+		livro.setISBN(createUpdateLivroDTO.getISBN());
+		livro.setPreco(createUpdateLivroDTO.getPreco());
+		livro.setDataDePublicacao(new Date());
+		livros.add(livro);
+		return livro;
+	}
+	
+	@PutMapping("{isbn}")
+	@ResponseStatus(HttpStatus.OK)
+	public LivroDTO atualizar(@PathVariable String isbn,
+							  @RequestBody CreateUpdateLivroDTO createUpdateLivroDTO) {
+		
+		LivroDTO livro = buscarLivroPorISBN(isbn);
+		livro.setTitulo(createUpdateLivroDTO.getTitulo());
+		livro.setDescricao(createUpdateLivroDTO.getDescricao());
+		livro.setISBN(createUpdateLivroDTO.getISBN());
+		livro.setPreco(createUpdateLivroDTO.getPreco());
+		livro.setDataDePublicacao(new Date());
+		return livro;
+	}
+	
+	@PatchMapping("{isbn}")
+	@ResponseStatus(HttpStatus.OK)
+	public LivroDTO atualizarPreco(@PathVariable String isbn,
+								   @RequestBody UpdatePrecoLivroDTO dto) {
+		LivroDTO livro = buscarLivroPorISBN(isbn);
+		livro.setPreco(dto.getPreco());
+		
+		return livro;
+		
+	}
+	
+	@DeleteMapping("{isbn}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteLivro(@PathVariable String isbn) {
+		LivroDTO livro = buscarLivroPorISBN(isbn);
+		livros.remove(livro);
+	}
+	
+	private LivroDTO buscarLivroPorISBN(String isbn) {
+		return livros.stream().filter(dto -> dto.getISBN().equals(isbn))
+				.findFirst()
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	}
+	
 }
