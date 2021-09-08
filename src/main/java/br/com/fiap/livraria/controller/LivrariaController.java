@@ -1,9 +1,6 @@
 package br.com.fiap.livraria.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,105 +14,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
-import br.com.fiap.livraria.model.dto.CreateUpdateLivroDTO;
+import br.com.fiap.livraria.model.dto.NovoLivroDTO;
 import br.com.fiap.livraria.model.dto.LivroDTO;
-import br.com.fiap.livraria.model.dto.UpdatePrecoLivroDTO;
+import br.com.fiap.livraria.model.dto.AtualizaPrecoLivroDTO;
+import br.com.fiap.livraria.service.LivrariaService;
 
 @RestController
 @RequestMapping("livros")
 public class LivrariaController {
 	
-	//mock
-	private List<LivroDTO> livros;
+	private LivrariaService livrariaService;
 	
-	//mock
-	public LivrariaController() {
-		LivroDTO livro = new LivroDTO();
-		livro.setId(1);
-		livro.setTitulo("Aprenda Spring");
-		livro.setDescricao("Passo a passo com Spring Framework");
-		livro.setDataDePublicacao(new Date());
-		livro.setISBN("987134354354654");
-		livro.setPreco(20.4);
-		
-		LivroDTO livro1 = new LivroDTO();
-		livro1.setId(2);
-		livro1.setTitulo("Java");
-		livro1.setDescricao("Tudo sobre Java");
-		livro1.setDataDePublicacao(new Date());
-		livro1.setISBN("132465789456321");
-		livro1.setPreco(30.4);
-		
-		livros = new ArrayList<LivroDTO>();
-		livros.add(livro);
-		livros.add(livro1);
+	public LivrariaController(LivrariaService livrariaService) {
+		this.livrariaService = livrariaService;
 	}
 	
 	@GetMapping
 	public List<LivroDTO> buscarLivros(@RequestParam(required=false,value="titulo")String titulo){
-		return livros.stream()
-				.filter(dto -> titulo == null || dto.getTitulo()
-				.contains(titulo)).collect(Collectors.toList());
-		
+		return livrariaService.listarLivros(titulo);
 	}
 	
-	@GetMapping("{isbn}")
-	public LivroDTO buscarPorId(@PathVariable String isbn) {
-		return buscarLivroPorISBN(isbn);
+	@GetMapping("{id}")
+	public LivroDTO buscarPorId(@PathVariable Long id) {
+		return livrariaService.buscarLivroPorId(id);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public LivroDTO criar(@RequestBody CreateUpdateLivroDTO createUpdateLivroDTO) {
-		LivroDTO livro = new LivroDTO();
-		livro.setId(livros.size()+1);
-		livro.setTitulo(createUpdateLivroDTO.getTitulo());
-		livro.setDescricao(createUpdateLivroDTO.getDescricao());
-		livro.setISBN(createUpdateLivroDTO.getISBN());
-		livro.setPreco(createUpdateLivroDTO.getPreco());
-		livro.setDataDePublicacao(new Date());
-		livros.add(livro);
-		return livro;
+	public LivroDTO criar(@RequestBody NovoLivroDTO createUpdateLivroDTO) {
+		return livrariaService.criar(createUpdateLivroDTO);
 	}
 	
-	@PutMapping("{isbn}")
+	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public LivroDTO atualizar(@PathVariable String isbn,
-							  @RequestBody CreateUpdateLivroDTO createUpdateLivroDTO) {
-		
-		LivroDTO livro = buscarLivroPorISBN(isbn);
-		livro.setTitulo(createUpdateLivroDTO.getTitulo());
-		livro.setDescricao(createUpdateLivroDTO.getDescricao());
-		livro.setISBN(createUpdateLivroDTO.getISBN());
-		livro.setPreco(createUpdateLivroDTO.getPreco());
-		livro.setDataDePublicacao(new Date());
-		return livro;
+	public LivroDTO atualizar(@PathVariable Long id,
+							  @RequestBody NovoLivroDTO createUpdateLivroDTO) {
+		return livrariaService.atualizar(id, createUpdateLivroDTO);
 	}
 	
-	@PatchMapping("{isbn}")
+	@PatchMapping("{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public LivroDTO atualizarPreco(@PathVariable String isbn,
-								   @RequestBody UpdatePrecoLivroDTO dto) {
-		LivroDTO livro = buscarLivroPorISBN(isbn);
-		livro.setPreco(dto.getPreco());
-		
-		return livro;
+	public LivroDTO atualizarPreco(@PathVariable Long id,
+								   @RequestBody AtualizaPrecoLivroDTO dto) {
+		return livrariaService.atualizarPreco(id, dto);
 		
 	}
 	
-	@DeleteMapping("{isbn}")
+	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteLivro(@PathVariable String isbn) {
-		LivroDTO livro = buscarLivroPorISBN(isbn);
-		livros.remove(livro);
-	}
-	
-	private LivroDTO buscarLivroPorISBN(String isbn) {
-		return livros.stream().filter(dto -> dto.getISBN().equals(isbn))
-				.findFirst()
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+	public void deleteLivro(@PathVariable Long id) {
+		livrariaService.deletarLivro(id);
 	}
 	
 }
