@@ -25,12 +25,12 @@
 			"response": []
 		},
 		{
-			"name": "Consultar livro por isbn",
+			"name": "Consultar livro por id",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8088/livros/987134354354654",
+					"raw": "http://localhost:8088/livros/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -38,7 +38,7 @@
 					"port": "8088",
 					"path": [
 						"livros",
-						"987134354354654"
+						"1"
 					]
 				}
 			},
@@ -89,7 +89,7 @@
 					"raw": "{\n        \"titulo\": \"Postman 4all\",\n        \"descricao\": \"Passo a passo de como utilizar o Postman\",\n        \"preco\": 50.4,\n        \"isbn\": \"465798456132\"\n    }"
 				},
 				"url": {
-					"raw": "http://localhost:8088/livros/465798456132",
+					"raw": "http://localhost:8088/livros/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -97,7 +97,7 @@
 					"port": "8088",
 					"path": [
 						"livros",
-						"465798456132"
+						"3"
 					]
 				}
 			},
@@ -119,7 +119,7 @@
 					"raw": "{\n        \"preco\": 60.4\n    }"
 				},
 				"url": {
-					"raw": "http://localhost:8088/livros/465798456132",
+					"raw": "http://localhost:8088/livros/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -127,19 +127,19 @@
 					"port": "8088",
 					"path": [
 						"livros",
-						"465798456132"
+						"3"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Deletar livro por isbn",
+			"name": "Deletar livro por id",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8088/livros/465798456132",
+					"raw": "http://localhost:8088/livros/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -147,7 +147,7 @@
 					"port": "8088",
 					"path": [
 						"livros",
-						"465798456132"
+						"2"
 					]
 				}
 			},
