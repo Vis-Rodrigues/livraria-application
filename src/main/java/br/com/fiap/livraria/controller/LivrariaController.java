@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.livraria.model.dto.NovoLivroDTO;
 import br.com.fiap.livraria.model.dto.LivroDTO;
+import br.com.fiap.livraria.model.dto.AtualizaLivroDTO;
 import br.com.fiap.livraria.model.dto.AtualizaPrecoLivroDTO;
 import br.com.fiap.livraria.service.LivrariaService;
 
@@ -49,8 +50,8 @@ public class LivrariaController {
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public LivroDTO atualizar(@PathVariable Long id,
-							  @RequestBody NovoLivroDTO createUpdateLivroDTO) {
-		return livrariaService.atualizar(id, createUpdateLivroDTO);
+							  @RequestBody AtualizaLivroDTO updateLivroDTO) {
+		return livrariaService.atualizar(id, updateLivroDTO);
 	}
 	
 	@PatchMapping("{id}")
