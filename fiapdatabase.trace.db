@@ -1,3 +1,0 @@
-2021-09-08 00:14:36 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLException: Table "TB_LIVRO" not found; SQL statement:
-insert into tb_livro (id, data_de_publicacao, descricao, isbn, preco, titulo) values (null, ?, ?, ?, ?, ?) [42102-197]
